@@ -1,3 +1,15 @@
+SELECT 
+    'CREATE TABLE ' || TABLE_SCHEMA || '.' || TABLE_NAME || ' (' ||
+    LISTAGG(COLUMN_NAME || ' ' || DATA_TYPE || 
+            CASE WHEN IS_NULLABLE = 'NO' THEN ' NOT NULL' ELSE '' END, ', ') 
+        WITHIN GROUP (ORDER BY ORDINAL_POSITION) 
+    || ');' AS create_table_ddl
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_SCHEMA = 'PUBLIC'  -- Change to your schema
+AND TABLE_NAME = 'EMPLOYEES'  -- Change to your table
+GROUP BY TABLE_SCHEMA, TABLE_NAME;
+
+
 DECLARE query STRING;
 BEGIN
     -- Initialize the CREATE TABLE statement
